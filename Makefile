@@ -20,9 +20,9 @@ X:
 	strip -no_uuid -A -u -S -X -N -x $(BIN_DIR)xjulia
 
 Xdbg:
-	nasm -f macho64 -g -DDEBUG -l $(BIN_DIR)julia_a.lst julia.asm -o $(BIN_DIR)julia_a-dbg.o
-	g++ -c  $(DEBUG) $(CPP_FLAGS) -I/opt/X11/include xjulia.cpp -o $(BIN_DIR)xjulia_cpp-dbg.o
-	g++ -Wl,-no_pie $(DEBUG) $(CPP_FLAGS) -L/opt/X11/lib/ -lX11 $(BIN_DIR)julia_a-dbg.o $(BIN_DIR)xjulia_cpp-dbg.o -o $(BIN_DIR)xjulia-dbg
+#	nasm -f macho64 -g $(DEBUG) -l $(BIN_DIR)julia_a.lst julia.asm -o $(BIN_DIR)julia_a-dbg.o
+#	g++ -c  $(DEBUG) $(CPP_FLAGS) -I/opt/X11/include xjulia.cpp -o $(BIN_DIR)xjulia_cpp-dbg.o
+#	g++ -Wl,-no_pie $(DEBUG) $(CPP_FLAGS) -L/opt/X11/lib/ -lX11 $(BIN_DIR)julia_a-dbg.o $(BIN_DIR)xjulia_cpp-dbg.o -o $(BIN_DIR)xjulia-dbg
 
 optimized: 
 	nasm -f macho64 julia.asm -o $(BIN_DIR)julia_a.o
@@ -31,7 +31,7 @@ optimized:
 	strip -no_uuid -A -u -S -X -N -x $(BIN_DIR)julia
 
 debug:
-	nasm -f macho64 -g -DDEBUG -l $(BIN_DIR)julia_a.lst julia.asm -o $(BIN_DIR)julia_a-dbg.o
+	nasm -f macho64 $(DEBUG) -l $(BIN_DIR)julia_a.lst julia.asm -o $(BIN_DIR)julia_a-dbg.o
 	g++ -c $(DEBUG) $(CPP_FLAGS) julia.cpp -o $(BIN_DIR)julia_cpp-dbg.o 
 	g++ -Wl,-no_pie $(DEBUG) $(CPP_FLAGS) $(BIN_DIR)julia_cpp-dbg.o $(BIN_DIR)julia_a-dbg.o -o $(BIN_DIR)julia-dbg
 	dsymutil $(BIN_DIR)julia-dbg

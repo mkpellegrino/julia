@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
+//#include <string.h>
+#include <string>
 #include <math.h>
 Display *d;
 Window w;
@@ -102,8 +103,9 @@ void draw(double cr, double cc, int iterations, double ZOOM)
 	}
     }
   XClearArea(d,w,0,0, a.width, 20, 0);
-  char* title="X Julia - (C) 2019 - Michael K. Pellegrino - mkpelleg@freeshell.org";
-  XDrawString(d, w, DefaultGC(d, screen), a.width/2 - 195 /*x*/, 10 /*y*/, title, strlen(title));
+  std::string title="X Julia - (C) 2019 - Michael K. Pellegrino - mkpelleg@freeshell.org";
+  //char* title="X Julia - (C) 2019 - Michael K. Pellegrino - mkpelleg@freeshell.org";
+  XDrawString(d, w, DefaultGC(d, screen), a.width/2 - 195 /*x*/, 10 /*y*/, title.c_str(), strlen(title.c_str()));
 
   XSync(d, 0);
 };
@@ -216,8 +218,9 @@ int main(int argc, char** argv)
 	 case Expose:
 	   break;
 	 case KeyPress:
-
-	   printf( "Keypress: %d\n", e.xkey.keycode ); 
+#ifdef DEBUG
+	   printf( "Keypress: %d\n", e.xkey.keycode );
+#endif
 	   if ( e.xkey.keycode == 32 )
 	     {
 	       ZOOM*=1.1;
