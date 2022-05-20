@@ -1,0 +1,209 @@
+<html>
+  <head><title>Mandelbrot</title>
+    <script language="javascript">
+      var svg_array=[];
+
+      function redraw()
+      {
+	  document.getElementById("svg0").innerHTML=svg_array;
+      }
+
+      /* round a number (x) to the (10^y)th place */
+      function rn( x, y )
+      {
+	  return Math.round(x*(10**y))/(10**y);	  
+      }
+
+      function convertX(X)
+      {
+	  return Math.round(100*(Number(125)*Number(X)+Number(252)))/100;
+      }
+
+      function convertY(Y)
+      {
+	  return Math.round(100*(Number(-125)*Number(Y)+Number(252)))/100;
+      }
+
+      /* helper function */
+      function addObjectAndRedraw(text)
+      {
+	  addObject(text);
+	  redraw();
+      }
+      
+      function addObject(text)
+      {
+	  
+	  svg_array.pop(); /* pop off the </svg> tag */
+	  svg_array.push( text );
+	  svg_array.push("</svg>"); /* push it back on */
+      }
+
+      function addPoint( x, y, c )
+      {
+	  var color_string="#";
+	  switch( c )
+	  {
+	      case 0:
+	      return;
+	      case 1:
+	      color_string+="00000F";
+	      break;
+	      case 2:
+	      color_string+="0000FF";
+	      break;
+	      case 3:
+	      color_string+="000F0F";
+	      break;
+	      case 4:
+	      color_string+="000FFF";
+	      break;
+	      case 5:
+	      color_string+="00F00F";
+	      break;
+	      case 6:
+	      color_string+="00F0FF";
+	      break;
+	      case 7:
+	      color_string+="00FF0F";
+	      break;
+	      case 8:
+	      color_string+="00FFFF";
+	      break;
+	      case 8:
+	      color_string+="0F000F";
+	      break;
+	      case 9:
+	      color_string+="0F00FF";
+	      break;
+	      case 10:
+	      color_string+="0F0F0F";
+	      break;
+	      case 11:
+	      color_string+="0F0FFF";
+	      break;
+	      case 12:
+	      color_string+="0FF00F";
+	      break;
+	      case 13:
+	      color_string+="0FF0FF";
+	      break;
+	      case 14:
+	      color_string+="0FFF0F";
+	      break;
+	      case 15:
+	      color_string+="0FFFFF";
+	      break;
+	      case 16:
+	      color_string+="F00000";
+	      break;
+	      case 17:
+	      color_string+="F0000F";
+	      break;
+	      case 18:
+	      color_string+="F000FF";
+	      break;
+	      case 19:
+	      color_string+="F00F0F";
+	      break;
+	      case 20:
+	      color_string+="F00FFF";
+	      break;
+	      case 21:
+	      color_string+="F0F00F";
+	      break;
+	      case 22:
+	      color_string+="F0F0FF";
+	      break;
+	      case 23:
+	      color_string+="F0FF0F";
+	      break;
+	      case 24:
+	      color_string+="F0FFFF";
+	      break;
+	      case 25:
+	      color_string+="FF000F";
+	      break;
+	      case 26:
+	      color_string+="FF00FF";
+	      break;
+	      case 27:
+	      color_string+="FF0F0F";
+	      break;
+	      case 28:
+	      color_string+="FF0FFF";
+	      break;
+	      case 29:
+	      color_string+="FFF00F";
+	      break;
+	      case 30:
+	      color_string+="FFF0FF";
+	      break;
+	      case 31:
+	      color_string+="FFFF0F";
+	      break;
+	      case 32:
+	      color_string+="FFFFFF";
+	      break;
+	      default:
+	      color_string+="000000";
+	      break;
+	  }
+
+	  
+	  addObject( "<circle stroke-width='0' fill='" + color_string + "' stroke='" + color_string + "' cx='" + convertX(x) + "' cy='" + convertY(y) + "' r='1'/>" );
+      }
+      
+      function onload()
+      {
+	  svg_array.push("<svg id='svg0' width='504' height='504'>");
+	  svg_array.push("</svg>");
+	  mandelbrot();
+	  redraw();
+
+      }
+
+      function dot(r, c)
+      {
+	  /* save the original values of the real and imaginary portion of the # */
+	  var r0=r;
+	  var c0=c;
+	  /* (R + Ci)( R + Ci ) */
+	  /* R^2 + 2RCi - C^2 */
+
+	  for( var k = 0; k<32; k++ )
+	  {
+	      var r1=r*r-c*c + r0;
+	      var c1=2*r*c + c0;
+	      r=r1;
+	      c=c1;
+	      if( Math.sqrt((r-r0)*(r-r0)+(c-c0)*(c-c0)) > 40 ) return k;
+	  }
+
+	  /* if the distance between the original point and the new one is too great */
+	  /* then _NO_DOT_!!! (return 0) -- otherwise return 1 for (yes_dot) */
+
+	  if( Math.sqrt((r-r0)*(r-r0)+(c-c0)*(c-c0)) > 0 ) return 1;
+	  
+	  return 0;
+      }
+
+      function mandelbrot()
+      {
+	  for( var i=-2; i<=2; i=i+0.01 )
+	  {
+	      for( var j=2; j>=-2; j=j-0.01 )
+	      {
+		  addPoint( i, j, dot(i,j));
+	      }
+	  }
+	  redraw();
+      }
+    </script>
+  </head>
+  <body onload="onload();">
+    <title>Julia Set - (C)2022 - Michael K. Pellegrino</title>
+    <p id="svg0"></p>
+  </body>
+</html>
+    
